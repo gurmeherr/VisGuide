@@ -51,6 +51,13 @@ export const Profile = (): JSX.Element => {
         {/* Navigation Buttons */}
         <div className="space-y-4">
           <button
+            onClick={() => navigate('/privacy-policy')}
+            className="w-full h-[56px] bg-[#2C3E50] rounded-[12px] flex items-center justify-center hover:bg-[#34495E] transition-colors"
+          >
+            <span className="text-[#fbfbff] text-[17px] font-semibold">Privacy Policy</span>
+          </button>
+          
+          <button
             onClick={() => {
               localStorage.clear();
               navigate('/');

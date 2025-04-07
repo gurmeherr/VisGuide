@@ -9,6 +9,7 @@ import { Registration } from "./screens/Registration/Registration";
 import { Completion } from "./screens/Completion/Completion";
 import { Discover } from "./screens/Discover/Discover";
 import { Profile } from "./screens/Profile/Profile";
+import { PrivacyPolicy } from "./screens/PrivacyPolicy/PrivacyPolicy";
 
 ReactDOM.createRoot(document.getElementById("app")!).render(
   <React.StrictMode>
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById("app")!).render(
         <Route path="/completion" element={<Completion />} />
         <Route path="/discover" element={<Discover />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
