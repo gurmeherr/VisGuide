@@ -55,6 +55,10 @@ VisGuide is a web application designed to assist visually impaired individuals b
 4. Use the "Voice" button to toggle voice announcements on/off
 5. Use the "Refresh" button to reload the application if needed
 
+## Privacy
+
+VisGuide does not collect, store, or transmit any personal data. All processing happens locally on your device. For more information, please read our [Privacy Policy](PRIVACY_POLICY.md).
+
 ## Deployment
 
 This application can be deployed to Vercel or any other hosting platform that supports React applications.
