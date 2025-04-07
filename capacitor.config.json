@@ -1,0 +1,17 @@
+{
+  "appId": "com.example.visguide",
+  "appName": "VisGuide",
+  "webDir": "dist",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#4A90E2",
+    "statusBarStyle": "light",
+    "preferredContentMode": "mobile",
+    "allowsLinkPreview": false,
+    "scrollEnabled": false,
+    "hidesStatusBar": true,
+    "statusBarOverlaysWebView": true,
+    "allowMixedContent": true,
+    "limitsNavigationsToAppBoundDomains": true
+  }
+}
