@@ -5,8 +5,7 @@ import { IOSLayout } from "../../components/IOSLayout";
 export const Registration = (): JSX.Element => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: "",
-    age: ""
+    name: ""
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -43,22 +42,6 @@ export const Registration = (): JSX.Element => {
               onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
               className="w-full h-[56px] bg-[#fbfbff] rounded-[12px] px-4 text-[#7968ff] text-[17px] focus:outline-none focus:ring-2 focus:ring-[#fbfbff]"
               placeholder="Enter your name"
-              required
-            />
-          </div>
-
-          {/* Age Input */}
-          <div>
-            <label htmlFor="age" className="block text-[17px] text-[#fbfbff] mb-2">
-              Your Age
-            </label>
-            <input
-              type="number"
-              id="age"
-              value={formData.age}
-              onChange={(e) => setFormData(prev => ({ ...prev, age: e.target.value }))}
-              className="w-full h-[56px] bg-[#fbfbff] rounded-[12px] px-4 text-[#7968ff] text-[17px] focus:outline-none focus:ring-2 focus:ring-[#fbfbff]"
-              placeholder="Enter your age"
               required
             />
           </div>

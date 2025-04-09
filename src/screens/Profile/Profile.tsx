@@ -1,15 +1,32 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { IOSLayout } from "../../components/IOSLayout";
+import { TrashIcon } from '@heroicons/react/24/outline';
 
-interface Preferences {
-  [key: string]: string;
+interface UserPreferences {
+  voiceEnabled: boolean;
+  voiceSpeed: number;
+  voiceVolume: number;
 }
 
 export const Profile = (): JSX.Element => {
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-  const preferences: Preferences = JSON.parse(localStorage.getItem('userPreferences') || '{}');
+  const preferences: UserPreferences = JSON.parse(localStorage.getItem('preferences') || '{"voiceEnabled":true,"voiceSpeed":1,"voiceVolume":1}');
+
+  const handleSignOut = () => {
+    localStorage.removeItem('userData');
+    localStorage.removeItem('preferences');
+    navigate('/');
+  };
+
+  const handleDeleteAccount = () => {
+    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+      localStorage.removeItem('userData');
+      localStorage.removeItem('preferences');
+      navigate('/');
+    }
+  };
 
   const preferenceLabels: Record<string, string> = {
     "1": "Vision Impairment Level",
@@ -30,7 +47,6 @@ export const Profile = (): JSX.Element => {
             </span>
           </div>
           <h1 className="text-[34px] text-[#fbfbff] font-bold mb-2">{userData.name}</h1>
-          <p className="text-[17px] text-[#fbfbff] opacity-80">{userData.age} years old</p>
         </div>
 
         {/* Preferences Section */}
@@ -58,13 +74,24 @@ export const Profile = (): JSX.Element => {
           </button>
           
           <button
-            onClick={() => {
-              localStorage.clear();
-              navigate('/');
-            }}
+            onClick={() => navigate('/support')}
+            className="w-full h-[56px] bg-[#2C3E50] rounded-[12px] flex items-center justify-center hover:bg-[#34495E] transition-colors"
+          >
+            <span className="text-[#fbfbff] text-[17px] font-semibold">Support</span>
+          </button>
+          
+          <button
+            onClick={handleSignOut}
             className="w-full h-[56px] bg-[#E74C3C] rounded-[12px] flex items-center justify-center hover:bg-[#C0392B] transition-colors"
           >
             <span className="text-[#fbfbff] text-[17px] font-semibold">Sign Out</span>
+          </button>
+          <button
+            onClick={handleDeleteAccount}
+            className="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-800 transition-colors flex items-center gap-2"
+          >
+            <TrashIcon className="w-5 h-5" />
+            Delete Account
           </button>
         </div>
       </div>
