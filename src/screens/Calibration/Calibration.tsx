@@ -1,8 +1,27 @@
+/**
+ * Calibration Screen Component
+ * 
+ * This component guides users through a series of calibration steps to personalize
+ * their experience with the VisGuide application. It includes steps for measuring
+ * walking pace, rotation speed, gesture recognition, and audio feedback testing.
+ * The component uses the IOSLayout for consistent iOS-style UI elements.
+ */
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IOSLayout } from "../../components/IOSLayout";
 import { BottomNavigation } from "../../components/BottomNavigation";
 
+/**
+ * CalibrationStep Interface
+ * 
+ * Defines the structure for each calibration step:
+ * - id: Unique identifier for the step
+ * - title: Display title for the step
+ * - description: Brief explanation of the step
+ * - instruction: Specific instructions for the user
+ * - duration: Time allocated for the step in seconds
+ */
 interface CalibrationStep {
   id: number;
   title: string;
@@ -11,6 +30,15 @@ interface CalibrationStep {
   duration: number; // in seconds
 }
 
+/**
+ * Calibration Steps Configuration
+ * 
+ * Array of calibration steps that users must complete:
+ * 1. Step Length - Measures natural walking pace
+ * 2. Rotation - Measures turning speed
+ * 3. Gesture Recognition - Tests basic gesture controls
+ * 4. Audio Feedback - Verifies audio system functionality
+ */
 const calibrationSteps: CalibrationStep[] = [
   {
     id: 1,
@@ -42,7 +70,20 @@ const calibrationSteps: CalibrationStep[] = [
   }
 ];
 
+/**
+ * Calibration Component
+ * 
+ * Features:
+ * - Multi-step calibration process
+ * - Progress tracking and visualization
+ * - Timer-based step completion
+ * - Audio feedback testing
+ * - Data persistence for calibration results
+ * 
+ * @returns {JSX.Element} The rendered Calibration screen
+ */
 export const Calibration = (): JSX.Element => {
+  // Navigation and state management
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [isCalibrating, setIsCalibrating] = useState(false);
@@ -52,8 +93,15 @@ export const Calibration = (): JSX.Element => {
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
   const [isSoundPlaying, setIsSoundPlaying] = useState(false);
 
+  // Get current step data
   const currentStepData = calibrationSteps[currentStep];
 
+  /**
+   * Stops the current calibration step
+   * - Clears the timer
+   * - Resets calibration state
+   * - Resets completion state
+   */
   const stopCalibration = () => {
     if (timer) {
       clearInterval(timer);
@@ -64,6 +112,12 @@ export const Calibration = (): JSX.Element => {
     }
   };
 
+  /**
+   * Starts the current calibration step
+   * - Initializes timer
+   * - Tracks progress
+   * - Collects calibration data
+   */
   const startCalibration = () => {
     setIsCalibrating(true);
     setIsStepComplete(false);
@@ -93,6 +147,12 @@ export const Calibration = (): JSX.Element => {
     setTimer(newTimer);
   };
 
+  /**
+   * Handles navigation to the next step
+   * - Updates current step
+   * - Saves calibration data on completion
+   * - Navigates to object detection screen
+   */
   const handleNext = () => {
     if (currentStep < calibrationSteps.length - 1) {
       setCurrentStep(prev => prev + 1);
@@ -105,6 +165,11 @@ export const Calibration = (): JSX.Element => {
     }
   };
 
+  /**
+   * Handles navigation to the previous step
+   * - Updates current step
+   * - Resets step state
+   */
   const handleBack = () => {
     if (currentStep > 0) {
       setCurrentStep(prev => prev - 1);
@@ -113,6 +178,12 @@ export const Calibration = (): JSX.Element => {
     }
   };
 
+  /**
+   * Plays a test sound for audio feedback calibration
+   * - Handles iOS audio playback restrictions
+   * - Provides error feedback
+   * - Manages sound playing state
+   */
   const playTestSound = () => {
     const audio = new Audio('/test-sound.mp3');
     
@@ -149,6 +220,7 @@ export const Calibration = (): JSX.Element => {
 
   return (
     <IOSLayout>
+      {/* Main container with fixed width and padding */}
       <div className="w-[343px] mx-auto pt-8 pb-24">
         {/* Progress Bar */}
         <div className="w-full h-2 mb-4 bg-[#2C3E50] opacity-30 rounded-full">
@@ -157,6 +229,7 @@ export const Calibration = (): JSX.Element => {
             style={{ width: `${((currentStep + 1) / calibrationSteps.length) * 100}%` }}
           />
         </div>
+        {/* Progress Indicators */}
         <div className="w-full flex justify-between items-center mb-8">
           <span className="text-[#fbfbff] text-[13px] opacity-90">
             Step {currentStep + 1} of {calibrationSteps.length}
@@ -166,16 +239,20 @@ export const Calibration = (): JSX.Element => {
           </span>
         </div>
 
+        {/* Step Title and Description */}
         <h2 className="text-[24px] font-semibold text-[#fbfbff] mb-2">
           {calibrationSteps[currentStep].title}
         </h2>
         <p className="text-[17px] text-[#fbfbff] opacity-90 mb-4">
           {calibrationSteps[currentStep].description}
         </p>
+
+        {/* Calibration Instructions Container */}
         <div className="bg-[#fbfbff] rounded-[12px] p-6 mb-8">
           <p className="text-[20px] text-[#4A90E2] font-medium mb-4">
             {calibrationSteps[currentStep].instruction}
           </p>
+          {/* Timer Display */}
           {isCalibrating && (
             <div className="text-center">
               <div className="text-[48px] text-[#4A90E2] font-bold mb-2">
@@ -186,6 +263,7 @@ export const Calibration = (): JSX.Element => {
               </div>
             </div>
           )}
+          {/* Completion Message */}
           {isStepComplete && !isCalibrating && (
             <div className="text-center text-[#4A90E2] text-[17px] font-medium">
               Step completed!
@@ -195,6 +273,7 @@ export const Calibration = (): JSX.Element => {
 
         {/* Action Buttons */}
         <div className="flex flex-col gap-4">
+          {/* Audio Test Step Buttons */}
           {currentStep === 3 && (
             <>
               <button
@@ -212,11 +291,11 @@ export const Calibration = (): JSX.Element => {
               >
                 <span className="text-[#7968ff] text-[17px] font-semibold flex items-center gap-2">
                   Go to Detection
-                 
                 </span>
               </button>
             </>
           )}
+          {/* Regular Step Buttons */}
           {currentStep !== 3 && (
             <button
               onClick={isCalibrating ? stopCalibration : (isStepComplete ? handleNext : startCalibration)}

@@ -30,13 +30,13 @@ graph TD
 sequenceDiagram
     participant User
     participant App
-    participant Camera
+    participant Headband
     participant AI
     participant Voice
 
     User->>App: Open app
-    App->>Camera: Initialize camera
-    Camera->>AI: Stream frames
+    App->>Headband: Initialize camera
+    Headband->>AI: Stream frames
     AI->>AI: Process frame
     AI->>Voice: Generate description
     Voice->>User: Speak description

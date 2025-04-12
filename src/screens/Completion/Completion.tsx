@@ -1,13 +1,37 @@
+/**
+ * Completion Screen Component
+ * 
+ * This component displays a success message after user registration,
+ * welcoming the user and confirming their account creation. It uses
+ * the IOSLayout component for consistent iOS-style UI elements and
+ * provides navigation to the profile screen.
+ */
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { IOSLayout } from "../../components/IOSLayout";
 
+/**
+ * Completion Component
+ * 
+ * Features:
+ * - Displays success icon
+ * - Shows personalized welcome message
+ * - Provides navigation to profile screen
+ * - Uses consistent iOS-style design elements
+ * 
+ * @returns {JSX.Element} The rendered Completion screen
+ */
 export const Completion = (): JSX.Element => {
+  // Navigation hook for routing
   const navigate = useNavigate();
+  
+  // Load user data from localStorage
   const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 
   return (
     <IOSLayout>
+      {/* Main container with fixed width and top padding */}
       <div className="w-[343px] mx-auto pt-16">
         {/* Success Icon */}
         <div className="w-[80px] h-[80px] bg-[#fbfbff] rounded-full mx-auto mb-6 flex items-center justify-center">
@@ -16,7 +40,7 @@ export const Completion = (): JSX.Element => {
           </svg>
         </div>
 
-        {/* Welcome Message */}
+        {/* Welcome Message Section */}
         <h2 className="text-[34px] text-[#fbfbff] leading-[46px] mb-4">
           Welcome, {userData.name}!
         </h2>

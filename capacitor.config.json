@@ -1,5 +1,5 @@
 {
-  "appId": "com.example.visguide",
+  "appId": "com.visguide.app",
   "appName": "VisGuide",
   "webDir": "dist",
   "ios": {

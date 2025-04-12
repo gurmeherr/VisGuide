@@ -1,14 +1,30 @@
+/**
+ * Onboarding Component
+ * 
+ * This component handles the initial user onboarding process by presenting a series
+ * of questions to gather user preferences and requirements. The answers are used to
+ * customize the application experience for each user's specific needs.
+ * 
+ * Features:
+ * - Multi-step questionnaire with progress tracking
+ * - Saves user preferences to localStorage
+ * - Responsive UI with accessibility considerations
+ * - Smooth transitions between questions
+ */
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IOSLayout } from "../../components/IOSLayout";
 import { BottomNavigation } from "../../components/BottomNavigation.tsx";
 
+// Define the structure for each question in the onboarding flow
 interface Question {
   id: number;
   question: string;
   options: string[];
 }
 
+// Predefined questions for the onboarding process
 const questions: Question[] = [
   {
     id: 1,
@@ -39,9 +55,17 @@ const questions: Question[] = [
 
 export const Onboarding = (): JSX.Element => {
   const navigate = useNavigate();
+  // Track the current question index
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  // Store user answers with question IDs as keys
   const [answers, setAnswers] = useState<Record<number, string>>({});
 
+  /**
+   * Handles user's answer selection
+   * - Saves the answer to state
+   * - Moves to next question or completes onboarding
+   * - Stores preferences in localStorage before navigation
+   */
   const handleAnswer = (answer: string) => {
     setAnswers(prev => ({
       ...prev,
@@ -60,13 +84,14 @@ export const Onboarding = (): JSX.Element => {
   return (
     <IOSLayout>
       <div className="w-[343px] mx-auto pt-8 pb-24">
-        {/* Progress Bar */}
+        {/* Progress Bar - Shows completion status */}
         <div className="w-full h-2 mb-4 bg-[#2C3E50] opacity-30 rounded-full">
           <div 
             className="h-full bg-[#E74C3C] rounded-full transition-all duration-300"
             style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
           />
         </div>
+        {/* Question Counter and Percentage */}
         <div className="w-full flex justify-between items-center mb-8">
           <span className="text-[#fbfbff] text-[13px] opacity-90">
             Question {currentQuestion + 1} of {questions.length}
@@ -76,12 +101,12 @@ export const Onboarding = (): JSX.Element => {
           </span>
         </div>
         
-        {/* Question */}
+        {/* Current Question Display */}
         <p className="text-[34px] text-[#fbfbff] leading-[46px] mb-8">
           {questions[currentQuestion].question}
         </p>
 
-        {/* Options */}
+        {/* Answer Options - Each option is a clickable button */}
         <div className="flex flex-col gap-4">
           {questions[currentQuestion].options.map((option, index) => (
             <button
@@ -97,4 +122,4 @@ export const Onboarding = (): JSX.Element => {
       <BottomNavigation />
     </IOSLayout>
   );
-}; 
+};

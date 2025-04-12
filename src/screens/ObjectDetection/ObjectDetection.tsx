@@ -1,9 +1,27 @@
+/**
+ * Object Detection Screen Component
+ * 
+ * This component provides real-time object detection using the device's camera
+ * and the Roboflow API. It includes features for voice feedback, camera switching,
+ * and visual display of detection results. The component uses the IOSLayout
+ * for consistent iOS-style UI elements.
+ */
+
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
 import { IOSLayout } from "../../components/IOSLayout";
 import { BottomNavigation } from "../../components/BottomNavigation.tsx";
 
+/**
+ * Detection Interface
+ * 
+ * Represents a single object detection result with:
+ * - x, y: Center coordinates of the detected object
+ * - width, height: Dimensions of the bounding box
+ * - class: The detected object class/label
+ * - confidence: Detection confidence score (0-1)
+ */
 interface Detection {
   x: number;
   y: number;
@@ -13,13 +31,21 @@ interface Detection {
   confidence: number;
 }
 
-// Speech synthesis setup
+// Speech synthesis configuration
 const speechSynthesis = window.speechSynthesis;
 let lastSpokenTime = 0;
 const SPEECH_COOLDOWN = 2000; // Minimum time between speech cues in milliseconds
 let lastSpokenObject = ''; // Track the last spoken object
 let speechEnabled = false; // Track if speech is enabled
 
+/**
+ * Text-to-Speech Function
+ * 
+ * Converts text to speech using the Web Speech API
+ * Includes error handling and rate limiting
+ * 
+ * @param text - The text to be spoken
+ */
 const speak = (text: string) => {
   // If speech is not enabled, don't try to speak
   if (!speechEnabled) return;
@@ -58,11 +84,28 @@ const speak = (text: string) => {
   }
 };
 
+/**
+ * ObjectDetection Component
+ * 
+ * Main component for real-time object detection
+ * 
+ * Features:
+ * - Real-time camera feed
+ * - Object detection using Roboflow API
+ * - Voice feedback for detected objects
+ * - Camera switching (front/back)
+ * - Visual display of detection results
+ * 
+ * @returns {JSX.Element} The rendered Object Detection screen
+ */
 export const ObjectDetection = (): JSX.Element => {
+  // Navigation and refs
   const navigate = useNavigate();
   const webcamRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tempCanvasRef = useRef<HTMLCanvasElement>(null);
+  
+  // State management
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [detectionResults, setDetectionResults] = useState<Detection[]>([]);
@@ -71,10 +114,19 @@ export const ObjectDetection = (): JSX.Element => {
   const [speechStatus, setSpeechStatus] = useState<string>('Voice Off');
   const animationFrameRef = useRef<number>();
 
+  /**
+   * Toggles between front and back camera
+   */
   const toggleCamera = () => {
     setIsFrontCamera(!isFrontCamera);
   };
 
+  /**
+   * Sends image to Roboflow API for object detection
+   * 
+   * @param imageBlob - The image to be processed
+   * @returns Array of detection results
+   */
   const detectWithRoboflow = async (imageBlob: Blob) => {
     const formData = new FormData();
     formData.append("file", imageBlob);
@@ -97,6 +149,9 @@ export const ObjectDetection = (): JSX.Element => {
     }
   };
 
+  /**
+   * Initializes object detection and sets up continuous detection loop
+   */
   useEffect(() => {
     const initializeDetection = async () => {
       try {
@@ -152,6 +207,7 @@ export const ObjectDetection = (): JSX.Element => {
 
     initializeDetection();
 
+    // Cleanup function to cancel animation frame
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -159,6 +215,11 @@ export const ObjectDetection = (): JSX.Element => {
     };
   }, []);
 
+  /**
+   * Renders detection results on canvas and updates voice feedback
+   * 
+   * @param predictions - Array of detection results
+   */
   const renderPredictions = (predictions: Detection[]) => {
     if (!canvasRef.current || !webcamRef.current?.video) {
       console.log('Missing canvas or video reference');
@@ -203,12 +264,18 @@ export const ObjectDetection = (): JSX.Element => {
       lastSpokenObject = '';
     }
 
-    // Bounding boxes removed - no longer drawing boxes or labels
-    // Just update detection results
+    // Update detection results state
     setDetectionResults(validPredictions);
   };
 
-  // Helper function to describe object position
+  /**
+   * Generates a human-readable description of object position
+   * 
+   * @param detection - The detection result
+   * @param width - Canvas width
+   * @param height - Canvas height
+   * @returns Position description string
+   */
   const getPositionDescription = (detection: Detection, width: number, height: number): string => {
     const centerX = detection.x;
     const centerY = detection.y;
@@ -229,7 +296,9 @@ export const ObjectDetection = (): JSX.Element => {
     return `${horizontal} ${vertical}`;
   };
 
-  // Initialize speech synthesis
+  /**
+   * Initializes speech synthesis and voice selection
+   */
   useEffect(() => {
     // Check if speech synthesis is available
     if (!speechSynthesis) {
