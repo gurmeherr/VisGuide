@@ -1,7 +1,7 @@
-# VisGuide - AI-Powered Visual Assistance App
+# VisGuide 
 
 ## Overview
-VisGuide is a mobile application designed to assist visually impaired users by providing real-time object detection, text recognition, and voice guidance. The app uses advanced AI models to identify objects, read text, and provide audio feedback to help users navigate their environment.
+VisGuide is a device designed to assist visually impaired users by providing real-time object detection, text recognition, and voice guidance. The onboarding app uses advanced AI models to identify objects, read text, and provide audio feedback to help users navigate their environment.
 
 ## Features
 - Real-time object detection with voice feedback
